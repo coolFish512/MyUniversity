@@ -1,0 +1,7 @@
+".\Objects\STARTUP.obj",
+".\Objects\12864.obj",
+".\Objects\delay.obj",
+".\Objects\main.obj",
+".\Objects\read_data.obj" 
+TO ".\Objects\data_read_3" 
+PRINT(".\Listings\data_read_3.m51")

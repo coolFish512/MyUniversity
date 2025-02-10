@@ -1,0 +1,77 @@
+C51 COMPILER V9.60.7.0   READ_DATA                                                         01/13/2025 08:09:49 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE READ_DATA
+OBJECT MODULE PLACED IN .\Objects\read_data.obj
+COMPILER INVOKED BY: F:\Keil_v5\C51\BIN\C51.EXE read_data.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings
+                    -\read_data.lst) TABS(2) OBJECT(.\Objects\read_data.obj)
+
+line level    source
+
+   1          #include "read_data.h"
+   2          
+   3          // 从外部ROM读取指定地址的8bit数据的函数
+   4          unsigned char read_data(unsigned int addr) {
+   5   1          // 确保数据传输时，P2_7是低电位
+   6   1          addr = addr & 0x7FFF;
+   7   1          // 地址传输
+   8   1          P27 = 1;
+   9   1          P0 = addr;
+  10   1          P2 = addr >> 8;
+  11   1          //delay();  这里你原函数注释掉了延迟函数，可根据实际情况添加合适的延迟，保证硬件时序正确
+  12   1          // 数据传输
+  13   1          P27 = 0;
+  14   1          //delay();
+  15   1          P0 = 0xFF;
+  16   1          //delay();
+  17   1          // 返回数据
+  18   1          return P0;
+  19   1      }
+  20          
+  21          // 获取单词数量的函数
+  22          int get_word_count() {
+  23   1          // 根据新的hex文件格式，单词数量存放在地址0x1000处
+  24   1          return (int)read_data(0x1001);
+  25   1      }
+  26          
+  27          // 获取指定单词信息并存入数组的函数
+  28          void get_word_info(int word_index, unsigned char *word_array) {
+  29   1          int i = 0; // for
+  30   1          int index_addr_base = 0x1002;  // 索引部分起始地址为0x1002
+  31   1          int data_addr_base = index_addr_base + (int)get_word_count() * 3;  // 数据部分起始地址在索引部分之后
+  32   1      
+  33   1          // 先跳转到指定单词的索引位置
+  34   1          int current_index_addr = index_addr_base + (word_index-1) * 3;
+  35   1          // 读取单词起始地址高8位
+  36   1          int start_addr_high = read_data(current_index_addr);
+  37   1          // 读取单词起始地址低8位
+  38   1          int start_addr_low = read_data(current_index_addr + 1);
+  39   1          // 组合成完整的起始地址
+  40   1          int start_addr = ((start_addr_high << 8) | start_addr_low);
+  41   1      
+  42   1          // 读取单词长度
+  43   1          int word_length = read_data(current_index_addr + 2);
+  44   1      
+  45   1          // 将单词长度存入数组开头
+  46   1          word_array[0] = word_length;
+  47   1          // 读取单词的每个字母ASCII码并存入数组后续位置
+  48   1          for (i = 0; i < word_length; i++) {
+  49   2              word_array[i + 1] = (unsigned char)read_data(start_addr + i);
+  50   2          }
+  51   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+C51 COMPILER V9.60.7.0   READ_DATA                                                         01/13/2025 08:09:49 PAGE 2   
+
+   CODE SIZE        =    205    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      13
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

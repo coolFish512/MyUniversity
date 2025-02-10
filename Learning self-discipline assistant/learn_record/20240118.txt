@@ -1,0 +1,6 @@
+10:20:09|10:20:12|2秒|:/rewards/icons/comeOn.png|1|
+10:21:17|10:21:23|6秒|:/rewards/icons/comeOn.png|1|
+10:24:10|10:24:13|2秒|:/rewards/icons/comeOn.png|1|
+10:24:21|10:24:24|2秒|:/rewards/icons/comeOn.png|1|
+10:25:08|10:25:20|11秒|:/rewards/icons/comeOn.png|1|
+11:19:48|11:20:28|40秒|:/rewards/icons/comeOn.png|1|
